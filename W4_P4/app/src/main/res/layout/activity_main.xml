@@ -26,12 +26,13 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="5dip">
+
         <ImageView
             android:id="@+id/hangman_stand"
-            android:orientation="vertical"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/hangman_stand"/>
+            android:layout_height="433dp"
+            android:orientation="vertical"
+            android:src="@drawable/hangman_stand" />
         <ImageView
             android:id="@+id/hangman_head"
             android:layout_width="fill_parent"
@@ -87,16 +88,16 @@
         android:id="@+id/word_spaces_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal" >
+        android:gravity="center"
+        android:orientation="horizontal">
 
         <TextView
             android:id="@+id/word_spaces_filler"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="FILLER TEXTVIEW FOR WORD SPACES VIEW"
             android:textAlignment="center"
-            android:textSize="18sp" />
+            android:textSize="30sp" />
     </LinearLayout>
 
     <TextView
@@ -105,7 +106,7 @@
         android:layout_height="wrap_content"
         android:text="@string/choose_letter"
         android:textAlignment="center"
-        android:textSize="30sp" />
+        android:textSize="24sp" />
 
     <HorizontalScrollView
         android:layout_width="match_parent"
