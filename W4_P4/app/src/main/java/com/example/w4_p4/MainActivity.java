@@ -16,6 +16,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import static android.gesture.GestureOverlayView.ORIENTATION_HORIZONTAL;
+
 public class MainActivity extends AppCompatActivity {
     private ArrayList<String> words = new ArrayList<String>(Arrays.asList("ORANGE", "BOSTON", "LION", "OAK", "BASEBALL"));
     private String chosenword;
@@ -23,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
     private int hangman;
     private int userscore;
     private int index;
+    private int hint_count;
     private Button a_button;
     private Button b_button;
     private Button c_button;
@@ -49,17 +52,18 @@ public class MainActivity extends AppCompatActivity {
     private Button x_button;
     private Button y_button;
     private Button z_button;
+    private Button new_game_button;
+    private Button hint_button;
     private Button[] letter_buttons;
     private char[] textViews;
     private TextView word_space_filler;
+    private TextView hint_view;
     private String display;
     private ArrayList<Character> checker;
     private int lettercount;
     private char[] display2;
     private char[] correspond;
     private LinearLayout word_spaces_view;
-    private Button new_game_button;
-    private Button hint_button;
     private ImageView hangman_head;
     private ImageView hangman_body;
     private ImageView hangman_left_arm;
@@ -81,6 +85,112 @@ public class MainActivity extends AppCompatActivity {
         wincheck();
 
     }
+
+    private void giveHint(){ //Each word has three hints, and then the hint button gets disabled
+        switch (chosenword){
+            case "ORANGE":
+                if(hint_count == 0){
+                    hint_view.setText(R.string.orange_hint_1);
+                    //toast line
+                    hint_count++;
+                }
+                else if(hint_count == 1){
+                    hint_view.setText(R.string.orange_hint_2);
+                    //toast line
+                    hint_count++;
+                }
+                else{
+                    hint_view.setText(R.string.orange_hint_3);
+                    hint_button.setEnabled(false);
+                    //toast line
+                }
+                break;
+
+            case "OAK":
+                if(hint_count == 0){
+                    hint_view.setText(R.string.oak_hint_1);
+                    //toast line
+                    hint_count++;
+                }
+                else if(hint_count == 1){
+                    hint_view.setText(R.string.oak_hint_2);
+                    //toast line
+                    hint_count++;
+                }
+                else{
+                    hint_view.setText(R.string.oak_hint_3);
+                    hint_button.setEnabled(false);
+                    //toast line
+                }
+                break;
+
+            case "BOSTON":
+                if(hint_count == 0){
+                    hint_view.setText(R.string.boston_hint_1);
+                    //toast line
+                    hint_count++;
+                }
+                else if(hint_count == 1){
+                    hint_view.setText(R.string.boston_hint_2);
+                    //toast line
+                    hint_count++;
+                }
+                else{
+                    hint_view.setText(R.string.boston_hint_3);
+                    hint_button.setEnabled(false);
+                    //toast line
+                }
+                break;
+
+            case "LION":
+                if(hint_count == 0){
+                    hint_view.setText(R.string.lion_hint_1);
+                    //toast line
+                    hint_count++;
+                }
+                else if(hint_count == 1){
+                    hint_view.setText(R.string.lion_hint_2);
+                    //toast line
+                    hint_count++;
+                }
+                else{
+                    hint_view.setText(R.string.lion_hint_3);
+                    hint_button.setEnabled(false);
+                    //toast line
+                }
+                break;
+
+            case "BASEBALL":
+                if(hint_count == 0){
+                    hint_view.setText(R.string.baseball_hint_1);
+                    //toast line
+                    hint_count++;
+                }
+                else if(hint_count == 1){
+                    hint_view.setText(R.string.baseball_hint_2);
+                    //toast line
+                    hint_count++;
+                }
+                else{
+                    hint_view.setText(R.string.baseball_hint_3);
+                    hint_button.setEnabled(false);
+                    //toast line
+                }
+                break;
+        }
+    }
+
+    private void resetHints() { //Resets hint count and re-enables hint button. Will be changed to better deal with landscape vs. portrait orientation
+        int orientation = MainActivity.this.getResources().getConfiguration().orientation;
+        if(orientation == ORIENTATION_HORIZONTAL) {
+            hint_count = 0;
+            hint_button.setEnabled(true);
+            hint_view.setText("");
+            int hint_view_width = hint_view.getWidth();
+            hint_view.setMaxWidth(hint_view_width);
+        }
+    }
+
     private void outputfix(char[] c) {      // this is used so that we have space between each '_'
         for (int i = 0; i < c.length; i++) {
             if (i % 2 == 0) {
@@ -311,6 +421,7 @@ public class MainActivity extends AppCompatActivity {
         word_space_filler= (TextView) findViewById(R.id.word_spaces_filler);
         new_game_button = (Button) findViewById(R.id.new_game_button);
         hint_button = (Button) findViewById(R.id.hint_button);
+        hint_view = (TextView) findViewById(R.id.hint_view);
         hangman_body = (ImageView) findViewById(R.id.hangman_body);
         hangman_head = (ImageView) findViewById(R.id.hangman_head);
         hangman_left_arm = (ImageView) findViewById(R.id.hangman_left_arm);
@@ -321,6 +432,7 @@ public class MainActivity extends AppCompatActivity {
         initialize();
         updateMan();
         displayword();
+        resetHints();
 
         // Initiating array for the letter buttons
         letter_buttons = new Button[] {
@@ -347,6 +459,8 @@ public class MainActivity extends AppCompatActivity {
                 displayword();
                 updateMan();
                 resetbutton();
+                resetHints();
+
                 // new game functionality
             }
         });
@@ -354,12 +468,14 @@ public class MainActivity extends AppCompatActivity {
         hint_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // hint functionality
+                giveHint();
             }
         });
 
 
     }
+
+
 
 
 }
