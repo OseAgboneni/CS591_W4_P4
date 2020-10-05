@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageView hangman_right_arm;
     private ImageView hangman_left_leg;
     private ImageView hangman_right_leg;
-
+    private boolean q;
 
     private void checkLetter(char letter) { //Check if clicked letter is in the word
         if (chosenword.indexOf(letter) != -1) {
@@ -218,6 +218,7 @@ public class MainActivity extends AppCompatActivity {
     //initializing the basic state of the game
     private void initialize() {
         Collections.shuffle(words);
+        q=false;
         index = 0;
         hangman = 0;
         userscore = 0;
@@ -240,16 +241,6 @@ public class MainActivity extends AppCompatActivity {
 
     // This function checks if there are still words left that the user haven't try to guess yet, if they didn't give them the next word,
     // if the did shuffle the list of words
-    private void wordCheck() {
-        if (index < words.size() - 1) {
-            index++;
-            nextword();
-        } else {
-            Toast.makeText(getApplicationContext(), "You've guessed all of our words!\nShuffling words and restarting...", Toast.LENGTH_LONG).show();
-            index = 0;
-            Collections.shuffle(words);
-        }
-    }
 
     // this function is to get a char array that will later be used to help print the asnwers everytime the user gets a letter correct
     private void checkerinitialize(String checker2) {
@@ -285,13 +276,23 @@ public class MainActivity extends AppCompatActivity {
     //check if the player have guessed the words correctly, if they did give them a new word
     private void wincheck(){
         if(letterremmain == 0) {
-            Toast.makeText(getApplicationContext(), String.format("Congradulations You win! Score: %d", userscore), Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), String.format("Congradulations! You win! Score: %d", userscore), Toast.LENGTH_LONG).show();
             hangman = 0;
             updateMan();
             userscore = 0;
-            nextword();
-
-            displayword();
+            resetbutton();
+            if (index < words.size() - 1) {
+                q = true;
+                nextword();
+                displayword();
+            }
+            else{
+                Toast.makeText(getApplicationContext(), "You've guessed all of our words!\nShuffling words and restarting the game!", Toast.LENGTH_LONG).show();
+                initialize();
+                displayword();
+                updateMan();
+                resetbutton();
+            }
         }
 
     }
@@ -448,6 +449,11 @@ public class MainActivity extends AppCompatActivity {
                 public void onClick(View v) { //Setting the on-clock listener for all buttons at once with a loop
                     checkLetter(letter_buttons[index].getText().charAt(0));
                     letter_buttons[index].setEnabled(false);
+                    if(q == true){       //the boolean handles the case when the last letter use to complete the correct guess of the world doesn't
+                                         // become disabled on the next word.
+                        letter_buttons[index].setEnabled(true);
+                    }
+                    q = false;
                 }
             });
         }
