@@ -37,7 +37,7 @@
             android:id="@+id/hangman_head"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="130dp"
+            android:layout_marginTop="115dp"
             android:layout_marginLeft="75dp"
             android:src="@drawable/hangman_head"
             android:visibility="invisible"/>
@@ -45,7 +45,7 @@
             android:id="@+id/hangman_body"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="173dp"
+            android:layout_marginTop="158dp"
             android:layout_marginLeft="95dp"
             android:src="@drawable/hangman_body"
             android:visibility="invisible"/>
@@ -53,7 +53,7 @@
             android:id="@+id/hangman_right_arm"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="190dp"
+            android:layout_marginTop="175dp"
             android:layout_marginLeft="99dp"
             android:src="@drawable/hangman_right_arm"
             android:visibility="invisible"/>
@@ -61,7 +61,7 @@
             android:id="@+id/hangman_left_arm"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="190dp"
+            android:layout_marginTop="175dp"
             android:layout_marginLeft="57dp"
             android:src="@drawable/hangman_left_arm"
             android:visibility="invisible"/>
@@ -69,7 +69,7 @@
             android:id="@+id/hangman_right_leg"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="240dp"
+            android:layout_marginTop="225dp"
             android:layout_marginLeft="97dp"
             android:src="@drawable/hangman_right_leg"
             android:visibility="invisible"/>
@@ -79,7 +79,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="68dp"
-            android:layout_marginTop="240dp"
+            android:layout_marginTop="225dp"
             android:src="@drawable/hangman_left_leg"
             android:visibility="invisible" />
     </FrameLayout>
