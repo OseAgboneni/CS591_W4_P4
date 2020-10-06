@@ -28,6 +28,17 @@ public class MainActivity extends AppCompatActivity {
     private int userscore;
     private int index;
     private int hint_count;
+    private char[] textViews;
+    private TextView word_space_filler;
+    private TextView hint_view;
+    private String display;
+    private ArrayList<Character> checker;
+    private int lettercount;
+    private char[] display2;
+    private char[] correspond;
+    private boolean q;
+
+
     private boolean landscape_orientation = false;
     private Button a_button;
     private Button b_button;
@@ -58,14 +69,7 @@ public class MainActivity extends AppCompatActivity {
     private Button new_game_button;
     private Button hint_button;
     private Button[] letter_buttons;
-    private char[] textViews;
-    private TextView word_space_filler;
-    private TextView hint_view;
-    private String display;
-    private ArrayList<Character> checker;
-    private int lettercount;
-    private char[] display2;
-    private char[] correspond;
+
     private LinearLayout word_spaces_view;
     private ImageView hangman_head;
     private ImageView hangman_body;
@@ -73,7 +77,6 @@ public class MainActivity extends AppCompatActivity {
     private ImageView hangman_right_arm;
     private ImageView hangman_left_leg;
     private ImageView hangman_right_leg;
-    private boolean q;
 
 
     private void checkLetter(char letter) { //Check if clicked letter is in the word
@@ -253,6 +256,7 @@ public class MainActivity extends AppCompatActivity {
     //initializing the basic state of the game
     private void initialize() {
         Collections.shuffle(words);
+        chosenword = words.get(index);
         q=false;
         index = 0;
         hangman = 0;
@@ -293,7 +297,7 @@ public class MainActivity extends AppCompatActivity {
     //This function is to display the "_ _ _ _ _"
 
     private void displayword() {
-        chosenword = words.get(index);
+//        chosenword = words.get(index);
         letterremmain = chosenword.length();
         lettercount = 0;
         checkerinitialize(chosenword);
@@ -478,11 +482,12 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         }
-
-        initialize();
-        updateMan();
-        displayword();
-        resetHints();
+        if(savedInstanceState==null) {
+            initialize();
+            updateMan();
+            displayword();
+            resetHints();
+        }
 
         // Initiating array for the letter buttons
         letter_buttons = new Button[] {
@@ -529,6 +534,7 @@ public class MainActivity extends AppCompatActivity {
         //No option for ArrayList<Character>. Need to change the type of checker
         outState.putCharArray("correspond", correspond);
         outState.putCharArray("display2", display2);
+        outState.putCharArray("textViews",textViews);
         outState.putBoolean("landscape_orientation", landscape_orientation);
         outState.putBoolean("q", q);
         outState.putInt("hangman", hangman);
@@ -537,6 +543,17 @@ public class MainActivity extends AppCompatActivity {
         outState.putInt("lettercount", lettercount);
         outState.putInt("userscore", userscore);
         outState.putString("chosenword", chosenword);
+        outState.putInt("index",index);
+        outState.putCharSequence("wordSpaceFillerText",word_space_filler.getText());
+        outState.putString("display",display);
+        char[] checkerArray = new char[checker.size()];
+        for(int i = 0; i<checker.size();i++)
+            checkerArray[i]=checker.get(i);
+        outState.putCharArray("checker",checkerArray);
+
+
+
+
         if(landscape_orientation) {
             outState.putString("hint_view", hint_view.getText().toString());
         }
@@ -548,23 +565,37 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
 
-        chosenword = savedInstanceState.getString("chosenword");
-        letterremmain = savedInstanceState.getInt("letterremain");
-        lettercount = savedInstanceState.getInt("lettercount");
+        correspond = savedInstanceState.getCharArray("correspond");
+        display2 = savedInstanceState.getCharArray("display2");
+        textViews = savedInstanceState.getCharArray("textViews");
+        landscape_orientation = savedInstanceState.getBoolean("landscape_orientation");
+
+        q = savedInstanceState.getBoolean("q");
         hangman = savedInstanceState.getInt("hangman");
         hint_count = savedInstanceState.getInt("hint_count");
+        letterremmain = savedInstanceState.getInt("letterremain");
+        lettercount = savedInstanceState.getInt("lettercount");
         userscore = savedInstanceState.getInt("userscore");
-        landscape_orientation = savedInstanceState.getBoolean("landscape_orientation");
-        q = savedInstanceState.getBoolean("q");
+        chosenword = savedInstanceState.getString("chosenword");
+
+        index = savedInstanceState.getInt("index");
+        word_space_filler.setText(savedInstanceState.getCharSequence("wordSpaceFillerText"));
+
+        display = savedInstanceState.getString("display");
+
         if(landscape_orientation){
             hint_view.setText(savedInstanceState.getString("hint_view"));
         }
-
+        char[] chars = savedInstanceState.getCharArray("checker");
+        checker = new ArrayList<>();
+        for(char c: chars){
+            checker.add(c);
+        }
         //Issue: When the screen rotates, initialize() in onCreate gets called, which resets everything and reshuffles the words
         //regardless of what I bring back from the outState bundle. Need to find a way to change the way the game is initialized
         //so that the word the player was on can stay even when app is created and destroyed.
 
-        displayword(); //Issue with calling this function.
+//        displayword(); //Issue with calling this function.
         updateMan();
 
         super.onRestoreInstanceState(savedInstanceState);
