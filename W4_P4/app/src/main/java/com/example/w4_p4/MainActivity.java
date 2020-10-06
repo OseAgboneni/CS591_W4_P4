@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -69,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
     private Button new_game_button;
     private Button hint_button;
     private Button[] letter_buttons;
+    private ArrayList<Integer> clickedBtns;//list of the indices of buttons already clicked by user
 
     private LinearLayout word_spaces_view;
     private ImageView hangman_head;
@@ -256,6 +258,7 @@ public class MainActivity extends AppCompatActivity {
     //initializing the basic state of the game
     private void initialize() {
         Collections.shuffle(words);
+        clickedBtns = new ArrayList<>();
         chosenword = words.get(index);
         q=false;
         index = 0;
@@ -264,6 +267,7 @@ public class MainActivity extends AppCompatActivity {
     }
     // this function provide the user with the next word they need to guess
     private void nextword() {
+        clickedBtns=new ArrayList<>();
         index++;
         chosenword = words.get(index);
         letterremmain = chosenword.length(); // the two counters here is for checking if the user have guessed all the letter of a word
@@ -508,6 +512,7 @@ public class MainActivity extends AppCompatActivity {
                         letter_buttons[index].setEnabled(true);
                     }
                     q = false;
+                    clickedBtns.add(index);
                 }
             });
         }
@@ -546,6 +551,7 @@ public class MainActivity extends AppCompatActivity {
         outState.putInt("index",index);
         outState.putCharSequence("wordSpaceFillerText",word_space_filler.getText());
         outState.putString("display",display);
+        outState.putIntegerArrayList("clickedBtns",clickedBtns);
         char[] checkerArray = new char[checker.size()];
         for(int i = 0; i<checker.size();i++)
             checkerArray[i]=checker.get(i);
@@ -565,6 +571,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
 
+        clickedBtns = savedInstanceState.getIntegerArrayList("clickedBtns");
         correspond = savedInstanceState.getCharArray("correspond");
         display2 = savedInstanceState.getCharArray("display2");
         textViews = savedInstanceState.getCharArray("textViews");
@@ -590,6 +597,10 @@ public class MainActivity extends AppCompatActivity {
         checker = new ArrayList<>();
         for(char c: chars){
             checker.add(c);
+        }
+
+        for(Integer i: clickedBtns){
+            letter_buttons[i].setEnabled(false);
         }
         //Issue: When the screen rotates, initialize() in onCreate gets called, which resets everything and reshuffles the words
         //regardless of what I bring back from the outState bundle. Need to find a way to change the way the game is initialized
